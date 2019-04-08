@@ -53,3 +53,9 @@ def update(request,id):
         # 인스턴스로 이 전의 데이터 가져옴  
         form = PostForm(instance=post)
     return render(request, 'posts/form.html',{'form':form})
+    
+# 삭제하기
+def delete(request,id):
+    post = Post.objects.get(id=id)
+    post.delete()
+    return redirect("posts:list")
