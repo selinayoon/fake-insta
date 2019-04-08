@@ -10,7 +10,10 @@ def create(request):
     #1. get방식으로 데이터를 입력할 form을 요청한다.
     #4. 사용자가 데이터를 입력해서 post방식으로 요청한다.
     #9.사용자가 다시 적절한 데이터를 입력해서 post방식으로 요청한다.
+    
+    #저장을 하는지, 폼을 보여주는지 판단. get:폼 보여주기, post:저장하기
     if request.method == "POST":
+        
         #5. post방식으로 저장요청을 받고, 데이터를  받아 postform에 넣어서 인스턴스화 한다.
         #10. 5번과 같음
         #request.POST:input안에 있는 데이터

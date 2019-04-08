@@ -1,10 +1,15 @@
 {% extends 'base.html' %}
+{% load bootstrap4 %}
+
 {% block body %}
     <!--form저장 위해-->
+    <!--action이 비워져있으면 자기 자신한테 돌아감(post/create) 돌아가면서 post방식으로 보냄-->
+    <!--action이 비워져 있어도 저장이 되는거임.-->
     <form action="" method='post'>
         {% csrf_token %}
         <!--form데이터 받기-->
-        {{form}}
+        <!--{{form}}대신 %%쓰기-->
+        {% bootstrap_form form %}
         <input type="submit">
     </form>
 {% endblock %}
