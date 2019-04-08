@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<h1>여기는 리스트입니다.</h1>
+    {% for post in posts %}
+        <!--extend와 반대되는 개념으로 포스츠라는 파일 안에 _post.html 끼워 넣기-->
+        <!--포스트를 반복해서 넣는다.-->
+        {% include 'posts/_post.html' %}
+    {% endfor%}
 {% endblock %}
