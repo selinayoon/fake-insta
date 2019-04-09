@@ -18,7 +18,8 @@ def create(request):
         #5. post방식으로 저장요청을 받고, 데이터를  받아 postform에 넣어서 인스턴스화 한다.
         #10. 5번과 같음
         #request.POST:input안에 있는 데이터
-        form = PostForm(request.POST)
+        # 사진 데이터 넣기
+        form = PostForm(request.POST, request.FILES)
         #6.검증 작업으로 form에 데이터가 제대로 들어왔는지 확인
         #11. 6번과 같음
         if form.is_valid():

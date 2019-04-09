@@ -1,5 +1,12 @@
 <div class="card">
-  <img src="..." class="card-img-top" alt="...">
+  <!--이것만 하면 오류가 생길 수 있다. 따라서,내부에서 if문을 작성해 사진 경로를 찾을 수 있도록 해쥰다.-->
+  
+  {% if post.image %}
+    <img src="{{post.image.url}}" class="card-img-top" alt="...">
+  {% else %}
+    <img src="..." class="card-img-top" alt="...">
+  {% endif %}
+  
   <div class="card-body">
     <p class="card-text">{{post.content}}</p>
     <a href="{% url 'posts:update' post.id %}" class="btn btn-warning">수정</a>
