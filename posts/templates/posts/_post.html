@@ -1,14 +1,32 @@
 <div class="card">
   <!--이것만 하면 오류가 생길 수 있다. 따라서,내부에서 if문을 작성해 사진 경로를 찾을 수 있도록 해쥰다.-->
   
-  {% if post.image %}
-    <img src="{{post.image.url}}" class="card-img-top" alt="...">
+  {% if post.image_set %}
+    <div id="post{{post.id}}" class="carousel slide" data-ride="carousel">
+      <div class="carousel-inner">
+        {% for image in post.image_set.all %}
+          <div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}">
+            <img src="{{image.file.url}}" class="d-block w-100" alt="...">
+          </div>
+        {% endfor %}
+      </div>
+      <a class="carousel-control-prev" href="#post{{post.id}}" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#post{{post.id}}" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+    
   {% else %}
     <img src="..." class="card-img-top" alt="...">
   {% endif %}
   
   <div class="card-body">
     <p class="card-text">{{post.content}}</p>
+        {{ post.content|safe }}
     <a href="{% url 'posts:update' post.id %}" class="btn btn-warning">수정</a>
     <a href="{% url 'posts:delete' post.id %}" class="btn btn-danger">삭제</a>
   </div>

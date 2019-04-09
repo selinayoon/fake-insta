@@ -10,7 +10,8 @@
         {% csrf_token %}
         <!--form데이터 받기-->
         <!--{{form}}대신 %%쓰기-->
-        {% bootstrap_form form %}
+        {% bootstrap_form post_form %}
+        {% bootstrap_form image_form %}
         <input type="submit">
     </form>
 {% endblock %}

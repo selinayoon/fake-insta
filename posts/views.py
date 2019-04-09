@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .forms import PostForm
+from .forms import PostForm, ImageForm
 from .models import Post
 
 # Create your views here.
@@ -18,24 +18,47 @@ def create(request):
         #5. post방식으로 저장요청을 받고, 데이터를  받아 postform에 넣어서 인스턴스화 한다.
         #10. 5번과 같음
         #request.POST:input안에 있는 데이터
-        # 사진 데이터 넣기
-        form = PostForm(request.POST, request.FILES)
+        # 사진 데이터 넣기 사용자가 작성한 정보, 파일 넣기
+        #form = PostForm(request.POST, request.FILES)
+        
+        #수정
+        #post폼에다 post정보만
+        #이미지 폼에다 이미지 정보만 따로다로 넣게 수정
+        post_form = PostForm(request.POST)
+        image_form = ImageForm(request.POST,request.FILES)
+        
+        
         #6.검증 작업으로 form에 데이터가 제대로 들어왔는지 확인
         #11. 6번과 같음
-        if form.is_valid():
-            form.save()
+        if post_form.is_valid():
+            # 12. 적절한 데이터가 들어온다. 데이터를 저장하고 list페이지로 리다이렉트!!
+            post = post_form.save() #게시물 내용만 저장.
+            # 파일 안에있는 이미지 가져오기(리스트 형태로), 이미지 출력하기
+            #이미지를 따로따로따로 
+            #1:N관계
+            for image in request.FILES.getlist('file'):
+                request.FILES['file'] = image
+                image_form = ImageForm(request.POST, request.FILES)
+                #이미지 아닌거 거르기
+                if image_form.is_valid():
+                    image = image_form.save(commit=False)
+                    image.post = post
+                    image.save()
+            
             return redirect("posts:list")
         # else:
         #     #7. 데이터 검증을 통과하지 못한 경우
         #     pass # 없어도 무방한 코드
     else:
         #2. PostForm을 인스턴스화(변수화) 시켜서 form에 저장한다.
-        form = PostForm()
+        post_form = PostForm()
+        image_form = ImageForm()
     
     #사용자가 데이터를 잘못입력했을 때, 8은 입력된 데이터를 계속 유지시켜준다.
     #3. form을 담아 create.html로 보내준다.
     #8. 사용자가 입력한 데이터는 form에 담아진 상태로 다시 form을 담아 create.html을 보내준다.
-    return render(request, 'posts/form.html',{'form':form})
+    #postform에는 postform을  imageform에는 imageform을 넣어준다.
+    return render(request, 'posts/form.html', {'post_form':post_form,"image_form":image_form})
     
 
 #수정을 하려면 이전의 데이터를 찾아와야한다.
