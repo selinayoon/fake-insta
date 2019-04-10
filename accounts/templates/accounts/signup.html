@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block body %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {{form}}
+        <input type="submit" values="제출">
+    </form>
+   <!--여러가지 폼들을 넣을 경우가 있기 때문에 사용할 때 기본 폼을 따로 만들어줘야한다-->
+{% endblock %}

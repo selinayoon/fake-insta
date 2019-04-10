@@ -22,6 +22,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('posts/', include('posts.urls')),
+    #accounts로 들어오면 여기로 넘겨줘
+    path('accounts/',include('accounts.urls'))# , 도 잊지마 은솔^^
 ]
 
 #사진 저장 경로 환경변수에 접근하도록 지정
