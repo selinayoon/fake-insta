@@ -35,7 +35,9 @@ def create(request):
         #11. 6번과 같음
         if post_form.is_valid():
             # 12. 적절한 데이터가 들어온다. 데이터를 저장하고 list페이지로 리다이렉트!!
-            post = post_form.save() #게시물 내용만 저장.
+            post = post_form.save(commit=False) #게시물 내용만 저장.
+            post.user = request.user
+            post.save()
             # 파일 안에있는 이미지 가져오기(리스트 형태로), 이미지 출력하기
             #이미지를 따로따로따로 
             #1:N관계
@@ -44,7 +46,7 @@ def create(request):
                 image_form = ImageForm(request.POST, request.FILES)
                 #이미지 아닌거 거르기
                 if image_form.is_valid():
-                    image = image_form.save(commit=False)
+                    image = image_form.save(commit=False)# 잠깐만 기다료
                     image.post = post
                     image.save()
             
@@ -65,22 +67,25 @@ def create(request):
     
 
 #수정을 하려면 이전의 데이터를 찾아와야한다.
-# create 함수와 차이점은 이전의 정보를 가져온다는 것 
+# create 함수와 차이점은 이전의 정보를 가져온다는 것
+@login_required
 def update(request,id):
     post = Post.objects.get(id=id)
-    if request.method == "POST":
-        form = PostForm(request.POST,instance=post)
-        # form에 데이터 넣고 검증하기
-        if form.is_valid():
-            form.save()
-            return redirect("posts:list")
-        # else:
-        #     pass 없어도 무방한 코드
+    if post.user == request.user: # 지금 로그인한 사람이 게시물을 작성해따
+        if request.method == "POST":
+            form = PostForm(request.POST,instance=post)
+            # form에 데이터 넣고 검증하기
+            if form.is_valid():
+                form.save()
+                return redirect("posts:list")
+            # else:
+            #     pass 없어도 무방한 코드
+        else:
+            # 인스턴스로 이 전의 데이터 가져옴  
+            form = PostForm(instance=post)
+        return render(request, 'posts/form.html',{'form':form})
     else:
-        # 인스턴스로 이 전의 데이터 가져옴  
-        form = PostForm(instance=post)
-    return render(request, 'posts/form.html',{'form':form})
-    
+        return redirect("posts:list")
 # 삭제하기
 def delete(request,id):
     post = Post.objects.get(id=id)

@@ -5,7 +5,10 @@ from .models import Post,Image
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = '__all__'
+        # # content와 user의 정보를 다 보여줘
+        # fields = '__all__'
+        #컨텐츠만 보여줘
+        fields = ['content',]
 
 #이미지 올리기 위해
 class ImageForm(forms.ModelForm):
