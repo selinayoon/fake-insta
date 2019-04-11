@@ -26,4 +26,13 @@ class Image(models.Model):
             options={'quality':90},
 
     )
+# 코멘트는포스트 글에 속해 있음..
+class Comment(models.Model):
+    #외래키 필요
+    post = models.ForeignKey(Post, on_delete=models.CASCADE) # user한명이 comment 여러개 작성 가능
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content = models.CharField(max_length= 100)
+    #작성한 시간 변수 autonow:게시물을 처음 생성할 때만 저장 created:수정
+    created_at = models.DateTimeField(auto_now_add = True)
+    
     

@@ -38,4 +38,34 @@
       <a href="{% url 'posts:delete' post.id %}" class="btn btn-danger">삭제</a>
     {% endif %}  
   </div>
+  
+  <!--댓글 보여주는 부분-->
+  <div class="card-body">
+    <!--포스트가 가지고 있는 커멘트를 들고와-->
+    {% for comment in post.comment_set.all %}
+      <p class="card-text"><strong>{{comment.content}}</strong></p>
+      
+      <!--삭제버튼-->
+      {% if comment.user == user %}
+        <a class="btn btn-danger" href="{% url 'posts:comment_delete' post.id comment.id %}">삭제</a>
+      {% endif %}
+      
+      <!--for문 돌게 없으면 내요이 없으면 실행-->
+    {% empty %}
+      <p class="card-text">댓글 작성하기</p>
+    {% endfor %}
+  </div>
+  
+  <!--댓글 작성하는 공간 -  폼 띄우기-->
+  <!-- 폼을 띄우는 경로와 저장하는 경로가 다름..-->
+    <div class="card-body">
+    <!--몇번글에 댓글을 달지?-->
+    <form action="{% url 'posts:comment_create' post.id %}" method="post">
+      {% csrf_token %}
+      {{comment_form}}
+      <input type="submit" value="제출"/>
+    </form>
+      
+
+  </div>
 </div>
