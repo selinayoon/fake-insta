@@ -14,4 +14,6 @@ urlpatterns = [
     # 게시물의 아이디를 통해 어떤 게시물에 댓글을 달건지 지정
     path('<int:post_id>/comment/create/', views.comment_create, name="comment_create"), #id: postid
     path('<int:post_id>/comment/<int:comment_id>/delete/', views.comment_delete, name="comment_delete"),
+    
+    path('<int:id>/like/',views.like, name="like"),
 ]

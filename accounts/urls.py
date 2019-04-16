@@ -8,5 +8,13 @@ urlpatterns = [
     #로그인 경로 만들어주기
     path('login/', views.login, name='login'),
     #로그아웃
-    path('logout/', views.logout, name='logout')
+    path('logout/', views.logout, name='logout'),
+    #유저페이지
+    path('user_page/<int:id>/',views.user_page, name="user_page"),
+    
+    # #프로필 수정
+    # path('edit_profile/<int:id>/',views.edit_profile,name='edit_profile')
+    
+    path('follow/<int:id>',views.follow,name="follow"),
+    
     ]

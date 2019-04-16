@@ -127,3 +127,6 @@ STATIC_URL = '/static/'
 # media 저장 경로 설정
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# 우리가 accounts에 만든 유저 모델 사용하기위해
+AUTH_USER_MODEL = 'accounts.User'

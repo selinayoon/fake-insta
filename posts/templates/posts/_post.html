@@ -1,6 +1,6 @@
 <div class="card my-5">
     <div class="card-header">
-      <h5 class="card-text">{{post.user}}</h5>
+      <a href="{% url 'accounts:user_page' post.user.id %}" style="color:black"><h5 class="card-text">{{post.user}}</h5></a>
       
       
       
@@ -31,19 +31,36 @@
   {% endif %}
   
   <div class="card-body">
-    <p class="card-text">{{post.content}}</p>
+    
+    <!--좋아요버튼시작-->
+    {% if user in post.likes.all %}
+    <!--지금 로그인한 유저가 이 게시물 좋아요를 눌렀니?-->
+      <a href="{% url 'posts:like' post.id %}"> <i class="fas fa-heart" style="color:#ed4956" ></i></a>
+    {% else %}
+      <a href="{% url 'posts:like' post.id %}"><i class="far fa-heart" style="color:#ed4956"></i></a>
+    {% endif %}
+    <!--좋아요버튼끝-->
+
+    <p class="card-test">좋아요 {{post.likes.count}}개</p>
+    <p class="card-text"><strong>{{post.user}} </strong>{{post.content}}</p>
     <!--내가 작성한 게시물에만 수정, 삭제가 가능하게끔-->
     {% if post.user == user %}
+      <!--몇번글을 수정하고 지울지?-->
       <a href="{% url 'posts:update' post.id %}" class="btn btn-warning">수정</a>
       <a href="{% url 'posts:delete' post.id %}" class="btn btn-danger">삭제</a>
-    {% endif %}  
+    {% endif %}
+
   </div>
   
+  
+  
+
   <!--댓글 보여주는 부분-->
   <div class="card-body">
+    <hr/>
     <!--포스트가 가지고 있는 커멘트를 들고와-->
     {% for comment in post.comment_set.all %}
-      <p class="card-text"><strong>{{comment.content}}</strong></p>
+      <p class="card-text"><strong>{{comment.user}}  {{comment.content}}</strong></p>
       
       <!--삭제버튼-->
       {% if comment.user == user %}
@@ -52,6 +69,7 @@
       
       <!--for문 돌게 없으면 내요이 없으면 실행-->
     {% empty %}
+
       <p class="card-text">댓글 작성하기</p>
     {% endfor %}
   </div>
@@ -66,6 +84,6 @@
       <input type="submit" value="제출"/>
     </form>
       
-
+  <!--//댓글-->
   </div>
 </div>

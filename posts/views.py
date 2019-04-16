@@ -13,7 +13,7 @@ def list(request):
 
 #로그인을 하지 않으면 접근할 수 없다.
 @login_required   
-@require_POST #포스트 방식이 아니면 튕겨낸다.
+
 def create(request):
     #get 작성 폼 보여줄게post 작성한 내용 저장해줄게
     #1. get방식으로 데이터를 입력할 form을 요청한다.
@@ -134,3 +134,41 @@ def comment_delete(request,post_id,comment_id):
         comment.delete()
     return redirect("posts:list")
     
+#과거의 코드
+# @login_required
+# def like(request,id):
+#     user = request.user # 좋아요 누르는 유저 정보
+#     post = Post.objects.get(id=id)
+#     # 사용자가 좋아요를 안눌렀다면
+#     #     좋아요 추가
+#     # 사용자가 좋아요를 이미 눌렀다면
+#     #     좋아요 취소
+    
+#     likes = post.like_set.all()
+#     for like in likes:
+#         if user == like.user:
+#             #사용자가 이미 눌렀으 때
+#             check = 1
+#             like_post = like
+#     if check ==1:
+#         like_post.delete()
+#     else:
+#         #사용자가 안눌렀을 때            
+#         like = Like(user=user,post=post)
+#         like.save()
+#     return redirect('posts:list')
+
+@login_required
+def like(request,id):
+    user = request.user
+    post = Post.objects.get(id=id)
+    
+    # 사용자가 좋아요를 눌렀다면
+    # if 사용자 in 좋아요 목록
+    if user in post.likes.all():
+        post.likes.remove(user)
+    else:
+        # 사용자가 좋아요를 누르지 않았다면
+        post.likes.add(user)
+    return redirect('posts:list')
+        

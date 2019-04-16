@@ -11,6 +11,16 @@ class Post(models.Model):
     #user를 변수화 해서 넣는 형태
     #1:N관계 형성 , 사용자 한명이 자기가 쓴 게시물 여러개 가질 수 있다/
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # user를 변수화해서 넣음.
+    
+    # 좋아요 기능 추가
+    # N:M 관계
+    # 가운데 있는 모델을 자동으로 생성해준다. 무엇과 연결할지 알려줘야함.
+    # 온딜리트 자동 설정 됨.
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_post_set", blank=True)
+
+    #작성한 유저 저장 좋아요를 누른 유저 저장. 
+
+
 
 #post image 1:N 관계로 묶어주기
 class Image(models.Model):
@@ -35,4 +45,7 @@ class Comment(models.Model):
     #작성한 시간 변수 autonow:게시물을 처음 생성할 때만 저장 created:수정
     created_at = models.DateTimeField(auto_now_add = True)
     
-    
+# # 좋아요 기능 추가
+# class Like(models.Model):
+#     post = models.ForeignKey(Post,on_delete=models.CASCADE)
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
