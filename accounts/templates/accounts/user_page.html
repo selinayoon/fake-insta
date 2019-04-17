@@ -4,23 +4,45 @@
     <!--사용자 정보 출력 시작-->
     <div class="row">
         <div class="col-4">
-            <!--프로필이미지-->
+            <!--프로필이미지 출력-->
+            <!--사진이 없는 친구의 (등록하지 않은)유저는 오류가 뜨니, 조건을 달아준다.-->
+            {% if user_info.profile_image %}
+                <!--사진이 있다면 사진 출력-->
+                <img src="{{user_info.profile_image.url}}" alt="..." class="rounded-circle">
+            {% else %}
+                <!--사진이 없다면-->
+                <img src="/media/accounts/default.png" alt="..." class="rounded-circle">
+            {% endif %}
+            <!--프로필 이미지 출력 끝-->
         </div>
         <div class="col-8">
             
             <!--유저정보-->
             <h1>{{user_info.username}}</h1>
             <!--내가 팔로우 하는 목록에 상대가 있는지 여부-->
-            {% if user_info in user.followings.all %}
-                <a class="btn btn-outline-dark" href="{% url 'accounts:follow' user_info.id %}" role='button'>Following</a>
+            {% if user != user_info %}
+                <!--로그인 계정과 해당 계정이 다르면 팔로우 버튼이 뜨고-->
+                {% if user_info in user.followings.all %}
+                    <a class="btn btn-outline-dark" href="{% url 'accounts:follow' user_info.id %}" role='button'>Following</a>
+                {% else %}
+                    <a class='btn btn-primary' href="{%url 'accounts:follow' user_info.id %}">Follow</a>
+                {% endif %}
             {% else %}
-                <a class='btn btn-primary' href="{%url 'accounts:follow' user_info.id %}">Follow</a>
+                <!--로그인계정과 해당 계정이 같으면-->
+                <a href="{% url 'accounts:edit_profile' user_info.id %}" class="btn btn-light">수정</a>
             {% endif %}
-            <h5>
+                
+            <hr>
+            <h5>Posts : {{user_info.post_set.count}}</h5>
+            <h5>Follower : {{user_info.follower.count}}</h5>
             <h5>Following : {{user_info.followings.count}}</h5>
-            <h5>Follower : {{user_info.followers.count}}</h5>
+            
         </div>
-        
+        <!--유져 info 출력 시작-->
+            <div class="card-columns">
+                <p>{{user_info.introduce}}</p>
+            </div>
+            <!--//유저 info출력 끝-->
         <!--사용자 정보 출력 끝-->
         <!--작성글 출력 시작-->
         <div class="card-columns">

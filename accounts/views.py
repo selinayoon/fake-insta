@@ -2,8 +2,9 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def signup(request):
     if request.method == "POST":
@@ -58,3 +59,20 @@ def follow(request,id):
             me.followings.add(you)
     return redirect("accounts:user_page", id)
             
+#프로필 수정
+@login_required
+def edit_profile(request, id):
+    User = get_user_model()
+    user = User.objects.get(id=id)
+    if user == request.user:
+        if request.method=="POST":
+            # form = CustomUserChangeForm(request.POST)
+            # 이메일정보,이미지정보 넣기
+            form = CustomUserChangeForm(request.POST,request.FILES,instance=user)
+            if form.is_valid():
+                form.save()
+                return redirect('accounts:user_page',id)
+        else:
+            form = CustomUserChangeForm(instance=user)
+        return render(request,'accounts/form.html',{'form':form})
+    return redirect('accounts:login')

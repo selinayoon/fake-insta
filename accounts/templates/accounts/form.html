@@ -4,8 +4,10 @@
     <!--사인업이면 회원가입입니다. 아님ㄴ 로그인입니다.-->
     {% if request.resolver_match.url_name == 'signup' %}
         <h1> 여기는 회원가입 페이지 입니다. </h1>
+    {% elif request.resolver_match.url_name == 'login' %}
+        <h1>로그인</h1>
     {% else %}
-        <h1> 여기는 로그인 페이지 입니다. </h1>
+        <h1>프로필수정</h1>
     {% endif %}
     <form action="" method="post">
         {% csrf_token %}

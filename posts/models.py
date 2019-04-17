@@ -5,6 +5,13 @@ from django.conf import settings
 
 # Create your models here.
 
+# 해시태그 기능
+class Hashtag(models.Model):
+    content = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.content
+        
 class Post(models.Model):
     #max_length 꼭 넣어줘야함.
     content = models.CharField(max_length=100)
@@ -19,7 +26,9 @@ class Post(models.Model):
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_post_set", blank=True)
 
     #작성한 유저 저장 좋아요를 누른 유저 저장. 
-
+    
+    #해시태그 기능 넣기
+    hashtag = models.ManyToManyField(Hashtag,blank=True)
 
 
 #post image 1:N 관계로 묶어주기

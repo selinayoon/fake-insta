@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from .forms import PostForm, ImageForm, CommentForm
-from .models import Post,Comment
+from .models import Post, Comment, Hashtag
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 
@@ -43,9 +43,24 @@ def create(request):
             post = post_form.save(commit=False) #게시물 내용만 저장.
             post.user = request.user
             post.save()
+            
+            post
+            
+            
             # 파일 안에있는 이미지 가져오기(리스트 형태로), 이미지 출력하기
             #이미지를 따로따로따로 
             #1:N관계
+            # 글이 생성된 후, 해당글과 해시태그를 연결시켜야하므로 포스트를 저장한 후에 작업 진행.
+            content = post_form.cleaned_data.get('content')
+            content_words = content.split()
+            for word in content_words:
+                if word[0] == "#":
+                    tag = Hashtag.objects.get_or_create(content=word) #인 값이 있으면 가져오거나 생성
+                    #content 값이 있고, 가져와졌다고 하면, 방금 생성된 post에 hashtag에대가 add한다 tag를
+                    post.hashtag.add(tag[0]) #해시태그 추가
+            
+            
+            
             for image in request.FILES.getlist('file'):
                 request.FILES['file'] = image
                 image_form = ImageForm(request.POST, request.FILES)
@@ -83,6 +98,16 @@ def update(request,id):
             # form에 데이터 넣고 검증하기
             if form.is_valid():
                 form.save()
+                
+                
+                post.hashtags.clear() #해시태그를 날린 후 재생성
+                content = form.cleaned_data.get('content')
+                content_words = content.split()
+                for word in content_words:
+                    if word[0] == "#":
+                        #content 값이 있고, 가져와졌다고 하면, 방금 생성된 post에 hashtag에대가 add한다 tag를
+                        tag = Hashtag.objects.get_or_create(content=word) 
+                        post.hashtags.add(tag[0])
                 return redirect("posts:list")
             # else:
             #     pass 없어도 무방한 코드
