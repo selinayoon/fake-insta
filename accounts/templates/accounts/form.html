@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
+{% load socialaccount %}
+{% load static %}
 {% block body %}
-    <!--사인업이면 회원가입입니다. 아님ㄴ 로그인입니다.-->
     {% if request.resolver_match.url_name == 'signup' %}
-        <h1> 여기는 회원가입 페이지 입니다. </h1>
+        <h1>회원가입</h1>
     {% elif request.resolver_match.url_name == 'login' %}
         <h1>로그인</h1>
     {% else %}
@@ -14,5 +15,8 @@
         {% bootstrap_form form %}
         <input type="submit" values="제출">
     </form>
-   <!--여러가지 폼들을 넣을 경우가 있기 때문에 사용할 때 기본 폼을 따로 만들어줘야한다-->
+    {% if request.resolver_match.url_name == 'login' %}
+        <a href="{% provider_login_url 'kakao' method='oauth2' %}">{% static '/image/kakao_account_login_btn_medium_narrow.png' %}</a>
+    {% endif %}
+   
 {% endblock %}

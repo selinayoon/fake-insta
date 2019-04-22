@@ -37,10 +37,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    
     'posts',
     'bootstrap4',
     'imagekit',
     'accounts',
+    
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.kakao',
+    
+    
 ]
 
 MIDDLEWARE = [
@@ -130,3 +139,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # 우리가 accounts에 만든 유저 모델 사용하기위해
 AUTH_USER_MODEL = 'accounts.User'
+
+# 장고 allauth 설치하기
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+SITE_ID = 1
+
+LOGIN_REDIRECT_URL = 'posts:list'

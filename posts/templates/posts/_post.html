@@ -1,3 +1,4 @@
+{% load post_templatetag %}
 <div class="card my-5">
     <div class="card-header">
       <a href="{% url 'accounts:user_page' post.user.id %}" style="color:black"><h5 class="card-text">{{post.user}}</h5></a>
@@ -42,7 +43,7 @@
     <!--좋아요버튼끝-->
 
     <p class="card-test">좋아요 {{post.likes.count}}개</p>
-    <p class="card-text"><strong>{{post.user}} </strong>{{post.content}}</p>
+    <p class="card-text"><strong>{{post.user}} </strong>{{post|hashtag_link|safe}}</p>
     <!--내가 작성한 게시물에만 수정, 삭제가 가능하게끔-->
     {% if post.user == user %}
       <!--몇번글을 수정하고 지울지?-->

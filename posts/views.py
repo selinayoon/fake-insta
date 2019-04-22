@@ -1,9 +1,8 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from .forms import PostForm, ImageForm, CommentForm
 from .models import Post, Comment, Hashtag
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-
 
 # Create your views here.
 def list(request):
@@ -197,3 +196,10 @@ def like(request,id):
         post.likes.add(user)
     return redirect('posts:list')
         
+        
+def hashtag(request, id):
+    hashtag = Hashtag.objects.get(id=id)
+    posts = hashtag.post_set.all()
+    comment_form = CommentForm()
+    
+    return render(request, 'posts/list.html', {"posts":posts, "comment_form":comment_form, "hashtag":hashtag})
